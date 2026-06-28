@@ -1,6 +1,8 @@
 SOULFRAME INVENTORY GUARD
 =========================
 
+![Soulframe Inventory Guard watching a healthy session](screenshot.png)
+
 What it does
 ------------
 Sometimes Soulframe stops saving your inventory. When that happens, anything you
