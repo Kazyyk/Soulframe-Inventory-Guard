@@ -1,7 +1,7 @@
 SOULFRAME INVENTORY GUARD
 =========================
 
-![Soulframe Inventory Guard watching a healthy session](screenshot.png)
+![Soulframe Inventory Guard watching a healthy session](readme-header.png)
 
 What it does
 ------------
