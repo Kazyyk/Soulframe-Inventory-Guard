@@ -56,6 +56,30 @@ function Reset-State {
   $script:GiveUpCount  = 0
 }
 
+function Disable-QuickEdit {
+  # Windows consoles freeze the running program whenever the user selects text
+  # (QuickEdit Mode). For a background watcher that is dangerous: a stray click
+  # silently stops detection. Turn it off so the watcher keeps running no matter
+  # where you click. (To copy text from the window, use the title-bar menu ->
+  # Edit -> Mark instead.)
+  if (-not $script:OnWindows) { return }
+  try {
+    if (-not ('SFGuard.NativeConsole' -as [type])) {
+      Add-Type -Name NativeConsole -Namespace SFGuard -MemberDefinition @'
+[DllImport("kernel32.dll", SetLastError=true)] public static extern IntPtr GetStdHandle(int nStdHandle);
+[DllImport("kernel32.dll", SetLastError=true)] public static extern bool GetConsoleMode(IntPtr h, out uint mode);
+[DllImport("kernel32.dll", SetLastError=true)] public static extern bool SetConsoleMode(IntPtr h, uint mode);
+'@
+    }
+    $h = [SFGuard.NativeConsole]::GetStdHandle(-10)   # STD_INPUT_HANDLE
+    [uint32]$mode = 0
+    [void][SFGuard.NativeConsole]::GetConsoleMode($h, [ref]$mode)
+    # Clear ENABLE_QUICK_EDIT_MODE (0x40); set ENABLE_EXTENDED_FLAGS (0x80, required to apply).
+    $new = ($mode -band ([uint32]0xFFFFFFBF)) -bor ([uint32]0x80)
+    [void][SFGuard.NativeConsole]::SetConsoleMode($h, [uint32]$new)
+  } catch {}
+}
+
 function Parse-HeaderTime([string]$s) {
   $ic = [Globalization.CultureInfo]::InvariantCulture
   $style = [Globalization.DateTimeStyles]::AllowWhiteSpaces
@@ -197,11 +221,13 @@ if ($Scan) {
 
 # --------------------------- WATCH MODE (live) ------------------------------
 try { $Host.UI.RawUI.WindowTitle = 'Soulframe Inventory Guard' } catch {}
+Disable-QuickEdit
 
 Write-Host ''
 Write-Host '  Soulframe Inventory Guard' -ForegroundColor Cyan
 Write-Host '  Leave this window open while you play. It will pop up a warning the' -ForegroundColor Gray
-Write-Host '  moment Soulframe stops saving your items. Press Ctrl+C to stop.' -ForegroundColor Gray
+Write-Host '  moment Soulframe stops saving your items.' -ForegroundColor Gray
+Write-Host '  To stop watching, just close this window.' -ForegroundColor Gray
 Write-Host ''
 
 # Wait for the log to exist (so you can start this before launching the game).

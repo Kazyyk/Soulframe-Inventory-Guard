@@ -3,7 +3,7 @@ title Soulframe Inventory Guard
 REM ---------------------------------------------------------------------------
 REM  Double-click this file to start watching Soulframe for the "items don't
 REM  save" bug. Keep this window open while you play. If a red warning appears,
-REM  log out and back in.
+REM  log out and back in. To stop watching, just close this window.
 REM
 REM  This just runs the PowerShell script next to it (sf-inventory-guard.ps1).
 REM  Keep both files together in the same folder.
