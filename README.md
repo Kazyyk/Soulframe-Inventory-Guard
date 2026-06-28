@@ -1,8 +1,6 @@
 SOULFRAME INVENTORY GUARD
 =========================
 
-![Soulframe Inventory Guard watching a healthy session](screenshot.png)
-
 What it does
 ------------
 Sometimes Soulframe stops saving your inventory. When that happens, anything you
@@ -24,6 +22,9 @@ How to use it (the easy way)
    When that happens: LOG OUT AND BACK IN. That fixes it and starts saving again.
 
 That's it. You don't have to type anything.
+
+To stop watching, just close the window (click the X). You don't need to press
+Ctrl+C - closing the window stops everything cleanly.
 
 Tip: if you play in exclusive fullscreen, the pop-up may hide behind the game and
 you'll only hear the beep. Borderless or windowed mode lets the warning show on top.
